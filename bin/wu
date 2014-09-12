@@ -1,0 +1,15 @@
+#!/usr/bin/env perl
+use App::wu;
+
+die 'Weather Underground API key not found in environment variables. Add an environment variable WU_API_KEY and re-run this app' unless $ENV{WU_API_KEY};
+
+my $home_location = $ENV{WU_HOME_LOCATION} || 'New York City, NY';
+
+#capture location
+print "Enter city or zip / postal code ($home_location): ";
+my $location = <>;
+chomp $location;
+
+my $wu = App::wu->new( ($location || $home_location), $ENV{WU_API_KEY});
+
+$wu->print_hourly;
