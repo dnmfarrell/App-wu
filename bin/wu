@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 use App::wu;
 
+# PODNAME: wu.pl
+
 die 'Weather Underground API key not found in environment variables. Add an environment variable WU_API_KEY and re-run this app' unless $ENV{WU_API_KEY};
 
 my $home_location = $ENV{WU_HOME_LOCATION} || 'New York City, NY';
