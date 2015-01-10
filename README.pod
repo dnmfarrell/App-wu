@@ -8,14 +8,14 @@ App::wu - Terminal app that provides an hourly weather forecast using Weather Un
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 SYNOPSIS
 
 This module installs the C<wu> command which prints a 36 hour weather forecast at the command line using the Wunderground API. You'll need to get a Wunderground API key (they're free) and set the environment variable C<WU_API_KEY>. Optionally you can set the environment variable C<WU_HOME_LOCATION> which sets the default location for C<wu>.
 
     $ wu
-    Enter city or zip / postal code (London, UK):
+    Enter your location (London, UK):
     Time      ℉   ℃   Rain %  Conditions          
      2:00 AM  56  13       5  Clear                         
      3:00 AM  55  13       6  Partly Cloudy                 
@@ -23,10 +23,11 @@ This module installs the C<wu> command which prints a 36 hour weather forecast a
      5:00 AM  54  12       6  Partly Cloudy                 
      6:00 AM  54  12       7  Partly Cloudy                 
      7:00 AM  55  13       7  Partly Cloudy  
+    ...
 
 =head1 BUGS
 
-Windows PowerShell and cmd.exe both corrupt the Fareinheit and Celsius unicode output.
+Windows PowerShell and cmd.exe both corrupt the Fareinheit and Celsius degrees symbols.
 
 =head1 SEE ALSO
 
