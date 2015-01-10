@@ -5,6 +5,7 @@ package App::wu;
 use WWW::Wunderground::API 0.06;
 use Cache::FileCache;
 use Carp;
+use Try::Tiny;
 
 #ABSTRACT: Terminal app that provides an hourly weather forecast using Weather Underground API
 
@@ -13,7 +14,7 @@ use Carp;
 This module installs the C<wu> command which prints a 36 hour weather forecast at the command line using the Wunderground API. You'll need to get a Wunderground API key (they're free) and set the environment variable C<WU_API_KEY>. Optionally you can set the environment variable C<WU_HOME_LOCATION> which sets the default location for C<wu>.
 
     $ wu
-    Enter city or zip / postal code (London, UK):
+    Enter your location (London, UK):
     Time      ℉   ℃   Rain %  Conditions          
      2:00 AM  56  13       5  Clear                         
      3:00 AM  55  13       6  Partly Cloudy                 
@@ -21,12 +22,13 @@ This module installs the C<wu> command which prints a 36 hour weather forecast a
      5:00 AM  54  12       6  Partly Cloudy                 
      6:00 AM  54  12       7  Partly Cloudy                 
      7:00 AM  55  13       7  Partly Cloudy  
+    ...
 
 =cut
 
 =head1 BUGS
 
-Windows PowerShell and cmd.exe both corrupt the Fareinheit and Celsius unicode output.
+Windows PowerShell and cmd.exe both corrupt the Fareinheit and Celsius degrees symbols.
 
 =cut
 
@@ -50,7 +52,8 @@ Thanks to John Lifsey for writing L<WWW::Wunderground::API>
 
 =cut
 
-sub new {
+sub new
+{
     croak 'Incorrect number of args passed to constructor' unless @_ == 3;
     my ($class, $location, $api_key) = @_;
 
@@ -66,29 +69,45 @@ sub new {
     return bless { wu => $wu }, $class;
 }
 
-sub print_hourly {
+sub print_hourly
+{
     my $self = shift;
     my $wu = $self->{wu};
 
-    # print header
-    binmode STDOUT, ':utf8'; # for degrees symbol
-    printf "%-10s%-4s%-4s%-8s%-20s\n",
-           'Time',
-           "\x{2109}",
-           "\x{2103}",
-           'Rain %',
-           'Conditions';
+    try {
+        my @hourly_results = @{ $wu->hourly };
+        {
+            # print header
+            binmode STDOUT, ':utf8'; # for degrees symbol
+            printf "%-10s%-4s%-4s%-8s%-20s\n",
+                   'Time',
+                   "\x{2109}",
+                   "\x{2103}",
+                   'Rain %',
+                   'Conditions';
 
-    # print hourly
-    for (@{ $wu->hourly })
-    {
-        printf "%8s%4i%4i%8i  %-30s\n",
-               $_->{FCTTIME}{civil},
-               $_->{temp}{english},
-               $_->{temp}{metric},
-               $_->{pop},
-               $_->{condition};
-    }
+            # print hourly
+            for (@hourly_results)
+            {
+                printf "%8s%4i%4i%8i  %-30s\n",
+                       $_->{FCTTIME}{civil},
+                       $_->{temp}{english},
+                       $_->{temp}{metric},
+                       $_->{pop},
+                       $_->{condition};
+            }
+        }
+    } catch
+    {   # see if there is an error message to display
+        if (exists $wu->{data}{hourly}{response}{error}{description})
+        {
+            print "$wu->{data}{hourly}{response}{error}{description}\n";
+        }
+        else
+        {
+            print "Error connecting to Wunderground API (is your Internet connection active?)\n";
+        }
+    };
 }
 
 1;
