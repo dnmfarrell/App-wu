@@ -2,16 +2,35 @@
 use App::wu;
 
 # PODNAME: wu.pl
-
 die 'Weather Underground API key not found in environment variables. Add the environment variable WU_API_KEY and re-run this app' unless $ENV{WU_API_KEY};
 
-my $home_location = $ENV{WU_HOME_LOCATION} || 'New York City, NY';
+my $location = join(' ', @ARGV) || $ENV{WU_HOME_LOCATION};
 
-#capture location
-print "Enter your location ($home_location): ";
-my $location = <>;
-chomp $location;
 
-my $wu = App::wu->new( ($location || $home_location), $ENV{WU_API_KEY});
+unless ($location && $location =~ /\w/)
+{
+  # print instructions and exit if no location found
+  print "
+Use
+---
+    wu [location]
 
+Examples
+--------
+    wu
+    wu New York, NY
+    wu 10026, NY
+    wu London, UK
+    wu Paris, FR
+    wu Berlin, Germany
+
+Location is optional if you have set the environment variable WU_HOME_LOCATION\n";
+
+  exit 0;
+}
+
+print "Retrieving weather forecast for $location ...\n\n";
+
+# get weather
+my $wu = App::wu->new($location, $ENV{WU_API_KEY});
 $wu->print_hourly;

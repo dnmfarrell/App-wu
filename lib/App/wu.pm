@@ -13,8 +13,9 @@ use Try::Tiny;
 
 This module installs the C<wu> command which prints a 36 hour weather forecast at the command line using the Wunderground API. You'll need to get a Wunderground API key (they're free) and set the environment variable C<WU_API_KEY>. Optionally you can set the environment variable C<WU_HOME_LOCATION> which sets the default location for C<wu>.
 
-    $ wu
-    Enter your location (London, UK):
+    $ wu London, UK
+    Retrieving weather forecast for London, UK ...
+
     Time      ℉   ℃   Rain %  Conditions          
      2:00 AM  56  13       5  Clear                         
      3:00 AM  55  13       6  Partly Cloudy                 
@@ -28,7 +29,7 @@ This module installs the C<wu> command which prints a 36 hour weather forecast a
 
 =head1 BUGS
 
-Windows PowerShell and cmd.exe both corrupt the Fareinheit and Celsius degrees symbols.
+Windows PowerShell and cmd.exe both corrupt the Fareinheit and Celsius degrees symbols, but other than that work fine.
 
 =cut
 
