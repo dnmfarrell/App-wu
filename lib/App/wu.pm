@@ -16,13 +16,13 @@ This module installs the C<wu> command which prints a 36 hour weather forecast a
     $ wu London, UK
     Retrieving weather forecast for London, UK ...
 
-    Time      ℉   ℃   Rain %  Conditions          
-     2:00 AM  56  13       5  Clear                         
-     3:00 AM  55  13       6  Partly Cloudy                 
-     4:00 AM  55  13       6  Partly Cloudy                 
-     5:00 AM  54  12       6  Partly Cloudy                 
-     6:00 AM  54  12       7  Partly Cloudy                 
-     7:00 AM  55  13       7  Partly Cloudy  
+    Time      ℉   ℃   Rain %  Conditions
+     2:00 AM  56  13       5  Clear
+     3:00 AM  55  13       6  Partly Cloudy
+     4:00 AM  55  13       6  Partly Cloudy
+     5:00 AM  54  12       6  Partly Cloudy
+     6:00 AM  54  12       7  Partly Cloudy
+     7:00 AM  55  13       7  Partly Cloudy
     ...
 
 =cut
@@ -55,60 +55,59 @@ Thanks to John Lifsey for writing L<WWW::Wunderground::API>
 
 sub new
 {
-    croak 'Incorrect number of args passed to constructor' unless @_ == 3;
-    my ($class, $location, $api_key) = @_;
+  croak 'Incorrect number of args passed to constructor' unless @_ == 3;
+  my ($class, $location, $api_key) = @_;
 
-    my $wu = new WWW::Wunderground::API(
-        location => $location,
-        api_key  => $api_key,
-        auto_api => 1,
-        cache    => Cache::FileCache->new({
-                        namespace          => 'wundercache',
-                        default_expires_in => 2400 }),
-    );
+  my $wu = new WWW::Wunderground::API(
+    location => $location,
+    api_key  => $api_key,
+    auto_api => 1,
+    cache    => Cache::FileCache->new({
+      namespace          => 'wundercache',
+      default_expires_in => 2400 }),
+  );
 
-    return bless { wu => $wu }, $class;
+  return bless { wu => $wu }, $class;
 }
 
 sub print_hourly
 {
-    my $self = shift;
-    my $wu = $self->{wu};
+  my $self = shift;
+  my $wu = $self->{wu};
 
-    try {
-        my @hourly_results = @{ $wu->hourly };
-        {
-            # print header
-            binmode STDOUT, ':utf8'; # for degrees symbol
-            printf "%-10s%-4s%-4s%-8s%-20s\n",
-                   'Time',
-                   "\x{2109}",
-                   "\x{2103}",
-                   'Rain %',
-                   'Conditions';
+  try {
+    my @hourly_results = @{ $wu->hourly };
 
-            # print hourly
-            for (@hourly_results)
-            {
-                printf "%8s%4i%4i%8i  %-30s\n",
-                       $_->{FCTTIME}{civil},
-                       $_->{temp}{english},
-                       $_->{temp}{metric},
-                       $_->{pop},
-                       $_->{condition};
-            }
-        }
-    } catch
-    {   # see if there is an error message to display
-        if (exists $wu->{data}{hourly}{response}{error}{description})
-        {
-            print "$wu->{data}{hourly}{response}{error}{description}\n";
-        }
-        else
-        {
-            print "Error connecting to Wunderground API (is your Internet connection active?)\n";
-        }
-    };
+    # print header
+    binmode STDOUT, ':utf8'; # for degrees symbol
+    printf "%-10s%-4s%-4s%-8s%-20s\n",
+           'Time',
+           "\x{2109}",
+           "\x{2103}",
+           'Rain %',
+           'Conditions';
+
+    # print hourly
+    for (@hourly_results)
+    {
+      printf "%8s%4i%4i%8i  %-30s\n",
+             $_->{FCTTIME}{civil},
+             $_->{temp}{english},
+             $_->{temp}{metric},
+             $_->{pop},
+             $_->{condition};
+    }
+  } catch
+  {   # see if there is an error message to display
+    if (exists $wu->{data}{hourly}{response}{error}{description})
+    {
+      print "$wu->{data}{hourly}{response}{error}{description}\n";
+    }
+    else
+    {
+      print "Error connecting to Wunderground API (is your Internet connection active?)\n";
+    }
+  };
 }
 
 1;

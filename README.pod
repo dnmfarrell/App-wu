@@ -8,7 +8,7 @@ App::wu - Terminal app that provides an hourly weather forecast using Weather Un
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
@@ -17,13 +17,13 @@ This module installs the C<wu> command which prints a 36 hour weather forecast a
     $ wu London, UK
     Retrieving weather forecast for London, UK ...
 
-    Time      ℉   ℃   Rain %  Conditions          
-     2:00 AM  56  13       5  Clear                         
-     3:00 AM  55  13       6  Partly Cloudy                 
-     4:00 AM  55  13       6  Partly Cloudy                 
-     5:00 AM  54  12       6  Partly Cloudy                 
-     6:00 AM  54  12       7  Partly Cloudy                 
-     7:00 AM  55  13       7  Partly Cloudy  
+    Time      ℉   ℃   Rain %  Conditions
+     2:00 AM  56  13       5  Clear
+     3:00 AM  55  13       6  Partly Cloudy
+     4:00 AM  55  13       6  Partly Cloudy
+     5:00 AM  54  12       6  Partly Cloudy
+     6:00 AM  54  12       7  Partly Cloudy
+     7:00 AM  55  13       7  Partly Cloudy
     ...
 
 =head1 BUGS
