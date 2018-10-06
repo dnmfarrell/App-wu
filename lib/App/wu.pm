@@ -43,7 +43,7 @@ L<WWW::Wunderground::API> - the fabulous module that powers this app!
 
 =item *
 
-My PerlTricks.com L<article|http://perltricks.com/article/114/2014/9/11/Get-a-weather-report-at-the-terminal-with-Perl> about this script
+My Perl.com L<article|https://www.perl.com/article/114/2014/9/11/Get-a-weather-report-at-the-terminal-with-Perl/> about this script
 
 =back
 
