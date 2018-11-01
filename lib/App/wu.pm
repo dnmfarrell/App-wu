@@ -9,6 +9,10 @@ use Try::Tiny;
 
 #ABSTRACT: Terminal app that provides an hourly weather forecast using Weather Underground API
 
+=head1 WARNING
+
+The free Weather Underground API service is being L<discontinued|https://apicommunity.wunderground.com/weatherapi/topics/end-of-service-for-the-weather-underground-api>. This module will be moved to the BackPAN.
+
 =head1 SYNOPSIS
 
 This module installs the C<wu> command which prints a 36 hour weather forecast at the command line using the Wunderground API. You'll need to get a Wunderground API key (they're free) and set the environment variable C<WU_API_KEY>. Optionally you can set the environment variable C<WU_HOME_LOCATION> which sets the default location for C<wu>.
